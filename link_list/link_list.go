@@ -9,14 +9,15 @@ type LinkList struct {
 	Head *LinkNode
 }
 
-func (List *LinkList) init() LinkList {
+func (linklist *LinkList) InitLinkList() LinkList {
 	list := LinkList{
 		&LinkNode{nil, nil},
 	}
 	return list
 }
+
 //单链表查找第i个元素
-func (List *LinkList) getElem(linklist *LinkList, i int) *LinkNode {
+func (linklist *LinkList) GetElem(i int) *LinkNode {
 	cur := linklist.Head
 	for j := 1; j < i; j++ {
 		if cur.Next == nil {
@@ -26,14 +27,15 @@ func (List *LinkList) getElem(linklist *LinkList, i int) *LinkNode {
 	}
 	return cur
 }
+
 //单链表的按值查找
-func (List *LinkList) localElem(linklist *LinkList,data interface{}) *LinkNode{
+func (linklist *LinkList) LocalElem(data interface{}) *LinkNode {
 	cur := linklist.Head
-	if cur == nil && cur.Data !=data{
+	if cur == nil && cur.Data != data {
 		return nil
 	}
 	for {
-		if cur.Data == data{
+		if cur.Data == data {
 			return cur
 		}
 		if cur.Next == nil {
@@ -43,10 +45,11 @@ func (List *LinkList) localElem(linklist *LinkList,data interface{}) *LinkNode{
 	}
 	return nil
 }
+
 //将值为e的新结点插入到表的第i个结点的位置上，
-func (List *LinkList) listInsert(linklist *LinkList,i int,e *LinkNode) *LinkList{
-	preNode := List.getElem(linklist,i-1)
-	if preNode == nil{
+func (linklist *LinkList) ListInsert(i int, e *LinkNode) *LinkList {
+	preNode := linklist.GetElem(i - 1)
+	if preNode == nil {
 		return nil
 	}
 	temp := preNode.Next
@@ -56,9 +59,9 @@ func (List *LinkList) listInsert(linklist *LinkList,i int,e *LinkNode) *LinkList
 }
 
 //单链表的删除
-func (List *LinkList) ListDelete(linklist *LinkList,i int) *LinkList{
-	preNode := List.getElem(linklist,i-1)
-	if preNode == nil{
+func (linklist *LinkList) ListDelete(i int) *LinkList {
+	preNode := linklist.GetElem(i - 1)
+	if preNode == nil {
 		return nil
 	}
 	delElem := preNode.Next
@@ -67,19 +70,19 @@ func (List *LinkList) ListDelete(linklist *LinkList,i int) *LinkList{
 	return linklist
 }
 
-func (List *LinkList) length(linklist *LinkList)  int  {
+func (linklist *LinkList) Length() int {
 	cur := linklist.Head
 	count := 0
-	for cur != nil{
-		count ++
+	for cur != nil {
+		count++
 		cur = cur.Next
 	}
 	return count
 }
 
-func (List *LinkList) add(linklist *LinkList,e *LinkNode) *LinkList{
+func (linklist *LinkList) Add(e *LinkNode) *LinkList {
 	head := linklist.Head
-	if head == nil{
+	if head == nil {
 		return nil
 	}
 	e.Next = head
@@ -87,9 +90,9 @@ func (List *LinkList) add(linklist *LinkList,e *LinkNode) *LinkList{
 	return linklist
 }
 
-func (List *LinkList) append(linklist *LinkList,e *LinkNode) *LinkList{
+func (linklist *LinkList) Append(e *LinkNode) *LinkList {
 	cur := linklist.Head
-	if cur == nil{
+	if cur == nil {
 		return nil
 	}
 
@@ -100,11 +103,28 @@ func (List *LinkList) append(linklist *LinkList,e *LinkNode) *LinkList{
 	return linklist
 }
 
-
-
+func (linklist *LinkList) ListDeleteByData(data interface{}) *LinkList {
+	cur := linklist.Head
+	//单独处理头结点
+	if cur.Data == data {
+		linklist.Head = cur.Next
+		return linklist
+	}
+	for cur.Next != nil {
+		if cur.Next.Data == data {
+			temp := cur.Next
+			cur.Next = cur.Next.Next
+			temp.Next = nil
+			return linklist
+		} else {
+			cur = cur.Next
+		}
+	}
+	return nil
+}
 
 //tools
-func (List *LinkList) slice2LinkList(s []interface{}) *LinkList {
+func (List LinkList) slice2LinkList(s []interface{}) *LinkList {
 	if len(s) == 0 {
 		return nil
 	}
@@ -124,17 +144,15 @@ func (List *LinkList) slice2LinkList(s []interface{}) *LinkList {
 	return &linklist
 }
 
-func (List *LinkList) linkList2Slice(list *LinkList) []interface{} {
+func (linklist *LinkList) linkList2Slice() []interface{} {
 	rs := make([]interface{}, 0)
-	cur := list.Head
+	cur := linklist.Head
 	if cur == nil {
 		return nil
 	}
-	for cur != nil{
-		rs = append(rs,cur.Data)
+	for cur != nil {
+		rs = append(rs, cur.Data)
 		cur = cur.Next
 	}
 	return rs
 }
-
-
